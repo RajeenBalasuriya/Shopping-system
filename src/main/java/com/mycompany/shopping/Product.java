@@ -38,10 +38,8 @@ public abstract class Product {
     }
 
     public void setProductId(String productId) {
-        //initialize of validator object to validation process in product class
-        Validator validator = new Validator();
         
-        if(validator.isAlphaNumeric(productId)){
+        if(Validator.isAlphaNumeric(productId)){
             this.productId=productId;
             
         }
