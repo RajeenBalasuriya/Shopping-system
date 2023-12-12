@@ -40,6 +40,7 @@ public class ShoppingCart {
     public void removeProduct(Product product) {
         productList.remove(product);
     }
+    
 
     public double calculateTotalCost() {
         double totalCost = 0.0;
