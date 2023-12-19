@@ -4,11 +4,13 @@
  */
 package com.mycompany.shopping;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rajeen
  */
-public abstract class Product {
+public abstract class Product implements Serializable {
     
     
     
@@ -19,15 +21,17 @@ public abstract class Product {
     private double buyingPrice;
     
     
+    
 
     
     //constructor for product
-    public Product(String productName,int noOfAvailableItems,double marketPrice,double buyingPrice){
+    public Product(String productName,int noOfAvailableItems,double marketPrice,double buyingPrice,String productId){
         
         this.productName=productName;
         this.noOfAvailableItems=noOfAvailableItems;
         this.marketPrice=marketPrice;
         this.buyingPrice=buyingPrice;
+        this.productId=productId;
         
     }
     
@@ -39,13 +43,9 @@ public abstract class Product {
 
     public void setProductId(String productId) {
         
-        if(Validator.isAlphaNumeric(productId)){
+        
             this.productId=productId;
-            
-        }
-        else{
-            throw new IllegalArgumentException ("Invalid product id");
-        }
+        
     }
     
     
@@ -82,6 +82,8 @@ public abstract class Product {
     public void setBuyingPrice(double buyingPrice) {
         this.buyingPrice = buyingPrice;
     }
+    
+
     
     @Override
     public String toString(){

@@ -15,8 +15,8 @@ public class Clothing extends Product {
     
     
     //constructor for clothing class
-    public Clothing(int size, String colour, String productName, int noOfAvailableItems, double marketPrice, double buyingPrice) {
-        super(productName, noOfAvailableItems, marketPrice, buyingPrice);
+    public Clothing(int size, String colour, String productName, int noOfAvailableItems, double marketPrice, double buyingPrice,String productId) {
+        super(productName, noOfAvailableItems, marketPrice, buyingPrice,productId);
         this.size = size;
         this.colour = colour;
     }
@@ -42,8 +42,11 @@ public class Clothing extends Product {
     //overing the toString method
     @Override
     public String toString(){
-        return (super.toString() + "Colour:"+colour+" Size :"+size);
+        return (super.toString() + "Colour:"+colour+" Size :"+size+"Product type:Clothing");
     }
+    
+    
+    
     
     
     

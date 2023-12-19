@@ -72,7 +72,7 @@ public class productFactory {
            warrantyPeriod=scanner.nextLine();
            
            //intialize of the electronic product
-           return new Electronics( brand,warrantyPeriod,productName,noOfAvailableItems,marketPrice,buyingPrice);
+           return new Electronics( brand,warrantyPeriod,productName,noOfAvailableItems,marketPrice,buyingPrice,productId);
        }
        else{
           int size;
@@ -86,7 +86,7 @@ public class productFactory {
            System.out.println("please enter colour");
            colour=scanner.nextLine();
            
-           return new Clothing (size,colour,productName,noOfAvailableItems,marketPrice,buyingPrice);
+           return new Clothing (size,colour,productName,noOfAvailableItems,marketPrice,buyingPrice,productId);
        }
        
        
