@@ -15,5 +15,7 @@ public class Shopping {
         
         WestminsterShoppingManager s =WestminsterShoppingManager.getInstance();
         s.displayConsoleMenu();
+        
+        
     }
 }

@@ -39,6 +39,16 @@ public class Clothing extends Product {
         this.colour = colour;
     }
     
+    @Override
+    public String getProductType(){
+        return "Clothing";
+    }
+    
+     @Override
+    public String getProductInfo(){
+        return (Integer.toString(this.size)+" "+this.colour);
+    }
+    
     //overing the toString method
     @Override
     public String toString(){

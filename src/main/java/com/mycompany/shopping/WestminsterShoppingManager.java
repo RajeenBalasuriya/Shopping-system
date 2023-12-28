@@ -8,6 +8,9 @@ package com.mycompany.shopping;
  *
  * @author rajeen
  */
+import graphicalUserInterface.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,15 +27,14 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     private static WestminsterShoppingManager instance;
     //product list in the system  
-    private final List<Product> productListSystem;  
+    private final List<Product> productListSystem;
 
     // Private constructor to avoid instanziation of object outside the class
     private WestminsterShoppingManager() {
-        this.productListSystem=new ArrayList<>();
+        this.productListSystem = new ArrayList<>();
     }
 
     //enable global level access to ShoppingManager instance
-
     public static WestminsterShoppingManager getInstance() {
         if (instance == null) {
             instance = new WestminsterShoppingManager();
@@ -40,14 +42,13 @@ public class WestminsterShoppingManager implements ShoppingManager {
         return instance;
     }
 
-    // Other methods and fields as before...
-
+    
     // Method to display the console menu using a do-while loop
     public void displayConsoleMenu() {
-        
+
         //load existing data to the system
         loadProducts();
-        
+
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -57,11 +58,14 @@ public class WestminsterShoppingManager implements ShoppingManager {
             System.out.println("2. Delete Product");
             System.out.println("3. Display Product List");
             System.out.println("4. Save Product List to File");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.println("5.Graphical user interface");
+            System.out.println("6. Exit");
+            System.out.println("Enter your choice: ");
+            
 
             choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
+            
 
             switch (choice) {
                 case 1:
@@ -77,35 +81,34 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     saveProducts();
                     break;
                 case 5:
+                    HomeFrame homeFrame = new HomeFrame(this.getProductList());
+                    
+                    break;
+                case 6:
                     System.out.println("Exiting the console menu.");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 5);
-        
-    }
-    
-    
-    
-    //abstract methods from the ShoppingManager interface are implemented below
+        } while (choice != 6 );
 
+    }
+
+    //abstract methods from the ShoppingManager interface are implemented below
     @Override
     public void addProduct() {
-        
-       if(productListSystem.size()<50){
-           productFactory produce = new productFactory();
-           boolean add = productListSystem.add(produce.createProduct());
-           
-           if(!add){
-               System.out.println("Product did not added to the system");
-           }
-           else{
-               System.out.println("Product sucessfully added to the system");
-           }
-           
-        }
-        else{
+
+        if (productListSystem.size() < 50) {
+            productFactory produce = new productFactory();
+            boolean add = productListSystem.add(produce.createProduct());
+
+            if (!add) {
+                System.out.println("Product did not added to the system");
+            } else {
+                System.out.println("Product sucessfully added to the system");
+            }
+
+        } else {
             System.out.println("System can onlt have 50 type of products !");
         }
     }
@@ -113,24 +116,21 @@ public class WestminsterShoppingManager implements ShoppingManager {
     @Override
     public void removeProduct() {
         Scanner scanner = new Scanner(System.in);
-        
+
         System.out.println("Please enter the Id of the product that you want to remove:");
-        
+
         String productId = scanner.nextLine();
-        
-        for(Product product:productListSystem){
-            
-            if (productId.equals(product.getProductId())){
+
+        for (Product product : productListSystem) {
+
+            if (productId.equals(product.getProductId())) {
                 System.out.println(product);
-                
-                
-                
-                if(productListSystem.remove(product)){
-                    
+
+                if (productListSystem.remove(product)) {
+
                     System.out.println("Product removed successfully");
                     break;
-                }
-                else{
+                } else {
                     System.out.println("Product removed failed");
                     break;
                 }
@@ -140,7 +140,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     @Override
     public void printProducts() {
-        
+
         // Sorting based on the productId attribute using a custom comparator
         Collections.sort(productListSystem, Comparator.comparing(Product::getProductId));
 
@@ -148,32 +148,31 @@ public class WestminsterShoppingManager implements ShoppingManager {
         for (Product product : productListSystem) {
             System.out.println(product);
         }
-        
-      }
+
+    }
 
     @Override
     public void saveProducts() {
         try {
-                        File file = new File("productObject.ser");
-                        
-                        
-                        FileOutputStream fos = new FileOutputStream(file);
-                        ObjectOutputStream oos = new ObjectOutputStream(fos);
-                        
-			// write object to file
-                        for(Product product:productListSystem){
-                            oos.writeObject(product);
-        		   
+            File file = new File("productObject.ser");
 
-                        }
-                        
-		System.out.println("Saved");
-		} catch (IOException e) {
-                    System.out.println("Products not saved");
-		}
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            // write object to file
+            for (Product product : productListSystem) {
+                oos.writeObject(product);
+
+            }
+
+            System.out.println("Saved");
+        } catch (IOException e) {
+            System.out.println("Products not saved");
+        }
     }
-    
-        public void loadProducts() {
+
+    //implementation of load products method
+    public void loadProducts() {
         try {
             File file = new File("productObject.ser");
 
@@ -190,7 +189,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                         Product product = (Product) ois.readObject();
                         productListSystem.add(product);
                     } catch (ClassNotFoundException | IOException e) {
-                        
+
                         break;
                     }
                 }
@@ -202,9 +201,12 @@ public class WestminsterShoppingManager implements ShoppingManager {
         } catch (IOException e) {
             System.out.println("Error loading products");
         }
-    
-    
 
-        }
+    }
+    
+    public List<Product> getProductList(){
+        return productListSystem;
+    }
+
+
 }
-
