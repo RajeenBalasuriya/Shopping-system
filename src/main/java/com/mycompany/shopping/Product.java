@@ -83,12 +83,19 @@ public abstract class Product implements Serializable {
         this.buyingPrice = buyingPrice;
     }
     
+    
+    public abstract String getProductType();
+    
+    public abstract String getProductInfo();
+    
 
     
     @Override
     public String toString(){
         return ("Product ID :"+productId+" Product Name:"+productName+" Number of available items:"+noOfAvailableItems+" Market Price:"+marketPrice+" Buying Price:"+buyingPrice);
     }
+    
+    
     
     
 }
