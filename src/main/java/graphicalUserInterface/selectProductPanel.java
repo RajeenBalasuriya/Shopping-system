@@ -15,47 +15,38 @@ public class selectProductPanel extends JPanel {
     private final productInformationTable tableInfo;
 
     public selectProductPanel(List<Product> productListSystem) {
-        this.productListSystem = productListSystem;
-
-        // Set the layout manager to BorderLayout for the main panel
-        this.setLayout(new BorderLayout());
         
-        this.setBackground(Color.red);
+        this.productListSystem = productListSystem;
+        this.setLayout(new BorderLayout());
 
-       
-
-        // Add a label to the inner panel
+        
         JLabel selectedCategoryLabel = new JLabel("Selected category: ");
-
-        // Add the label to the inner panel
-        this.add(selectedCategoryLabel,BorderLayout.NORTH);
-
-        // Array of strings containing menu items
-        String menuItems[] = {"All","Electronics", "Clothing"};
-
-        // Create combo box
+        String menuItems[] = {"All", "Electronics", "Clothing"};
         JComboBox<String> dropMenu = new JComboBox<>(menuItems);
 
-       
-        // Add the inner panel to the main panel at BorderLayoutNORTH
-        this.add(dropMenu, BorderLayout.NORTH);
 
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        p2.add(selectedCategoryLabel);
+        p2.add(dropMenu);
+        this.add(p2, BorderLayout.NORTH);
+        
         // Creating the information table object
         tableInfo = new productInformationTable(productListSystem);
-        
         JScrollPane jScrollPane = new JScrollPane(tableInfo.table);
-        jScrollPane.setPreferredSize(new Dimension(1500, 400));
+        jScrollPane.setPreferredSize(new Dimension(500, 300));
+
+
         
+      JPanel p5=tableInfo.getPanel();
+      p5.setBackground(Color.GREEN);
+      this.add(p5,BorderLayout.SOUTH);
         
-        
-        // Add JScrollPane to an inner panel with FlowLayout.CENTER
         JPanel scrollPaneCenterPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         scrollPaneCenterPanel.add(jScrollPane);
 
         // Add the inner panel with JScrollPane to the main panel at BorderLayout CENTER
-        this.add(scrollPaneCenterPanel, BorderLayout.SOUTH);
-        
-        
+        this.add(scrollPaneCenterPanel, BorderLayout.CENTER);
+
         // Add an ActionListener to the combo box
         dropMenu.addActionListener(new ActionListener() {
             @Override
