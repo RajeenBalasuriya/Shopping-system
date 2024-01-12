@@ -58,6 +58,16 @@ public class Electronics extends Product{
         return (super.toString() + "Brand:"+brand+" Warranty :"+warrantyPeriod+" Product type:Electronics");
     }
     
+       @Override
+    public String additionalInfo1(){
+        return this.brand;
+    }
+    
+     @Override
+    public String additionalInfo2(){
+        return this.warrantyPeriod;
+    }
+    
    
     
 

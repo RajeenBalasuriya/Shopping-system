@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,8 @@ public class selectProductPanel extends JPanel {
     public selectProductPanel(List<Product> productListSystem) {
         
         this.productListSystem = productListSystem;
+        Collections.sort(productListSystem, Comparator.comparing(Product::getProductName));//sorting the list before adding to the table
+        
         this.setLayout(new BorderLayout());
 
         

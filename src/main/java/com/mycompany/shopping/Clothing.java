@@ -55,6 +55,16 @@ public class Clothing extends Product {
         return (super.toString() + "Colour:"+colour+" Size :"+size+"Product type:Clothing");
     }
     
+    @Override
+    public String additionalInfo1(){
+        return String.valueOf(this.size);
+    }
+    
+     @Override
+    public String additionalInfo2(){
+        return this.colour;
+    }
+    
     
     
     
