@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,6 +27,9 @@ public class WestminsterShoppingManager implements ShoppingManager {
     private static WestminsterShoppingManager instance;
     //product list in the system  
     private final List<Product> productListSystem;
+
+    //list to store user objects
+    private final List<User> userObjects = new ArrayList<>();
 
     // Private constructor to avoid instanziation of object outside the class
     private WestminsterShoppingManager() {
@@ -40,12 +44,13 @@ public class WestminsterShoppingManager implements ShoppingManager {
         return instance;
     }
 
-    
     // Method to display the console menu using a do-while loop
     public void displayConsoleMenu() {
 
         //load existing data to the system
         loadProducts();
+        //load existing users to the system
+        loadUsers();
 
         Scanner scanner = new Scanner(System.in);
         int choice;
@@ -59,15 +64,13 @@ public class WestminsterShoppingManager implements ShoppingManager {
             System.out.println("5.Graphical user interface");
             System.out.println("6. Exit");
             System.out.println("Enter your choice: ");
-            
 
             choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
-            
 
             switch (choice) {
                 case 1:
-                    addProduct();
+                    addProduct(productListSystem);
                     break;
                 case 2:
                     removeProduct();
@@ -79,8 +82,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     saveProducts();
                     break;
                 case 5:
-                    HomeFrame homeFrame = new HomeFrame(this.getProductList());
-                    
+                    manageUser(scanner);//will handle the gui inside the method
+
                     break;
                 case 6:
                     System.out.println("Exiting the console menu.");
@@ -88,26 +91,48 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 6 );
+        } while (choice != 6);
 
     }
 
     //abstract methods from the ShoppingManager interface are implemented below
     @Override
-    public void addProduct() {
+    public void addProduct(List<Product> productListSystem) {
 
         if (productListSystem.size() < 50) {
-            productFactory produce = new productFactory();
-            boolean add = productListSystem.add(produce.createProduct());
+            boolean add = true;  // Set to true by default
 
-            if (!add) {
-                System.out.println("Product did not added to the system");
-            } else {
-                System.out.println("Product sucessfully added to the system");
+            productFactory produce = new productFactory();
+            Product productToBeAdded = produce.createProduct();
+
+            for (Product product : productListSystem) {
+                if (product.getProductId().equals(productToBeAdded.getProductId())) {
+                    System.out.println("Product with this ID is available");
+                    System.out.println("Do you want to add more items for the available product? (Y/n)");
+
+                    Scanner scan = new Scanner(System.in);
+                    String decision = scan.next();
+
+                    if (decision.equals("Y") || decision.equals("y")) {
+                        int currentNoOfItems = product.getNoOfAvailableItems() + productToBeAdded.getNoOfAvailableItems();
+                        product.setNoOfAvailableItems(currentNoOfItems);
+                        System.out.println("Items are added to the same product ID");
+                        add = false;  // Set to false since the product was not added
+                        break;
+                    } else {
+                        System.out.println("Add the product with a different ID.");
+                        add = false;  // Set to false since the product was not added
+                        break;
+                    }
+                }
             }
 
+            if (add) {
+                productListSystem.add(productToBeAdded);
+                System.out.println("Product successfully added to the system");
+            }
         } else {
-            System.out.println("System can onlt have 50 type of products !");
+            System.out.println("System can only have 50 types of products!");
         }
     }
 
@@ -201,10 +226,130 @@ public class WestminsterShoppingManager implements ShoppingManager {
         }
 
     }
-    
-    public List<Product> getProductList(){
-        return productListSystem;
+
+    public void manageUser(Scanner scanner) {
+
+        boolean optionValidate;
+
+        do {
+            optionValidate = true;
+            try {
+                System.out.println("Choose Option 1 for Login or Option 2 for Register");
+
+                int option = scanner.nextInt();
+                scanner.nextLine();//consume the line
+
+                if (option == 1) {
+                    System.out.println("Please enter the username");
+                    String userName = scanner.next();
+                    scanner.nextLine();
+                    System.out.println("Please enter the password");
+                    String password = scanner.next();
+                    scanner.nextLine();
+
+                    int userListPointer = 0;//track the current object to check existing profiles
+                    // Check whether the given user object is available by using a for-each loop
+                    for (User user : userObjects) {
+
+                        if (user.getPassword().equals(password) && user.getUserName().equals(userName)) {
+                            HomeFrame homeFrame = new HomeFrame(this.getProductList(),user);
+                            optionValidate = false;
+                        }
+                        userListPointer++;
+                    }
+                    //display message no such account after traveling through userObject list
+                    if (userListPointer == userObjects.size()) {
+                        System.out.println("NO SUCH ACCOUNT!");
+                    }
+
+                } else {
+
+                    boolean passwordStatus;//used to track status of the password
+
+                    do {
+
+                        System.out.println("Please enter the username");
+                        String userName = scanner.next();
+                        scanner.nextLine();
+                        System.out.println("Please enter the password(numbers and characters)");
+                        String password = scanner.next();
+                        scanner.nextLine();
+
+                        //check wether the details are correct to make the profile
+                        if (Validator.isValidPassword(password)) {
+                            User user = new User(userName, password);//creation of the user object
+                            userObjects.add(user);// add created user to the list
+                            passwordStatus = false;//set to false to stop the loop as correct password is inputted
+                            saveUsers();
+                        } else {
+                            System.out.println("Invalid password. Please try again.");
+                            passwordStatus = true; // Set to true to continue the loop if the password is invalid
+                        }
+
+                    } while (passwordStatus);
+
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid Input!");
+                scanner.nextLine();
+                optionValidate = true;
+
+            }
+        } while (optionValidate);
+
     }
 
+    public void saveUsers() {
+        try {
+            File file = new File("userObject.ser");
+
+            try (FileOutputStream fos = new FileOutputStream(file); ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+
+                // write user objects to file
+                for (User user : userObjects) {
+                    oos.writeObject(user);
+                }
+
+                System.out.println("Users saved");
+            }
+        } catch (IOException e) {
+            System.out.println("Users not saved");
+        }
+    }
+
+    public void loadUsers() {
+        try {
+            File file = new File("userObject.ser");
+
+            if (file.exists()) {
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+
+                // Clear the existing user list before loading new objects
+                userObjects.clear();
+
+                // read user objects from file and add them to the list
+                while (true) {
+                    try {
+                        User user = (User) ois.readObject();
+                        userObjects.add(user);
+                    } catch (ClassNotFoundException | IOException e) {
+                        break;
+                    }
+                }
+
+                System.out.println("Users loaded");
+            } else {
+                System.out.println("User file does not exist. No users loaded.");
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading users");
+        }
+    }
+
+    public List<Product> getProductList() {
+        return productListSystem;
+    }
 
 }

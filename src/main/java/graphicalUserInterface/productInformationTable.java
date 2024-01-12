@@ -16,12 +16,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author rajeen
  */
-public class productInformationTable {
+public class ProductInformationTable {
 
     JTable table;
-    showDetailsPanel s;
+    ShowDetailsPanel s;
 
-    public productInformationTable(List<Product> productListSystem) {
+    public ProductInformationTable(List<Product> productListSystem) {
 
         // Define column names
         String[] columnNames = {" Product ID", "NAME", "Category", "Price", "Info"};
@@ -58,7 +58,7 @@ public class productInformationTable {
         table.setRowHeight(30);
         
 
-         s= new showDetailsPanel();
+         s= new ShowDetailsPanel();
          // Add a mouse listener to the table to capture clicks on rows
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override

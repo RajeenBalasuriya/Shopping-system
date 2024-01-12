@@ -42,7 +42,7 @@ public class Validator {
         String passPattern= "^(?=.*[0-9])"
                             + "(?=.*[a-z])(?=.*[A-Z])"
                             + "(?=.*[@#$%^&-+=()])"
-                            + "(?=\\S+$).{8, 20}$";
+                            + "(?=\\S+$).{8,20}$";
         
         return (Pattern.matches(passPattern, passwordToBeValidate));
     }

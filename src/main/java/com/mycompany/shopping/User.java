@@ -4,22 +4,24 @@
  */
 package com.mycompany.shopping;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rajeen
  */
-public class User {
-    
+public class User implements Serializable {
+    private final boolean isFirstPurchase;//used to track the first purchase
     private String userName;
     private String password;
-    private String firstName;
-    private String lastName;
+
     
     
-    public User(String userName,String firstName,String lastName){
+    public User(String userName,String password){
         this.userName=userName;
-        this.firstName=firstName;
-        this.lastName=lastName;
+        this.password=password;
+        this.isFirstPurchase=true;
+       
         
     }
 
@@ -43,23 +45,7 @@ public class User {
         this.userName = userName;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-  
 
     
     

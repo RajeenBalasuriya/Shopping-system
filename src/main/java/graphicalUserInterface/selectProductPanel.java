@@ -11,12 +11,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class selectProductPanel extends JPanel {
+public class SelectProductPanel extends JPanel {
 
     private final List<Product> productListSystem;
-    private final productInformationTable tableInfo;
+    private final ProductInformationTable tableInfo;
 
-    public selectProductPanel(List<Product> productListSystem) {
+    public SelectProductPanel(List<Product> productListSystem) {
         
         this.productListSystem = productListSystem;
         Collections.sort(productListSystem, Comparator.comparing(Product::getProductName));//sorting the list before adding to the table
@@ -35,7 +35,7 @@ public class selectProductPanel extends JPanel {
         this.add(p2, BorderLayout.NORTH);
         
         // Creating the information table object
-        tableInfo = new productInformationTable(productListSystem);
+        tableInfo = new ProductInformationTable(productListSystem);
         JScrollPane jScrollPane = new JScrollPane(tableInfo.table);
         jScrollPane.setPreferredSize(new Dimension(500, 300));
 
