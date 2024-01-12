@@ -36,12 +36,15 @@ public class productFactory {
        
        do{
            System.out.println("please enter the product id (must contain numbers and letters)");
-           productId=scanner.nextLine();
+           productId=scanner.next();
+           scanner.nextLine();//consume the line
            
            //validating the productId
            if(Validator.isAlphaNumeric(productId)){
                validateStatus=true;
-           }
+               
+               
+          }
            else{
                System.out.println("Please enter a valid productId");
                validateStatus=false;

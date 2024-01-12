@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  * 
  * @author rajeen
  */
-public class showDetailsPanel extends JPanel {
+public class ShowDetailsPanel extends JPanel {
     
     private final JLabel productID;
     private final JLabel productInfoLabel;
@@ -37,7 +37,7 @@ public class showDetailsPanel extends JPanel {
     /**
      * Creates a new instance of ShowDetailsPanel.
      */
-    public showDetailsPanel(){
+    public ShowDetailsPanel(){
         this.setLayout(new BorderLayout());
         this.setBackground(Color.red);
 
