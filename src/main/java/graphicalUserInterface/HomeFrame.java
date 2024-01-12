@@ -7,8 +7,12 @@ package graphicalUserInterface;
 import com.mycompany.shopping.Product;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -34,13 +38,31 @@ public class HomeFrame extends JFrame {
         // Center the frame on the screen
         this.setLocationRelativeTo(null);
         
-        //creating selelctPRoductPanel object
-        selectProductPanel p1=new selectProductPanel(productListSystem);
+       
+        
+        
+        
         
         this.setBackground(Color.yellow);
         
+        JPanel p2= new JPanel(new FlowLayout(FlowLayout.TRAILING));
+        JButton b = new JButton("Shopping Cart");
+        p2.add(b);
+        this.add(p2,BorderLayout.NORTH);
         
-        this.add(p1,BorderLayout.NORTH);
+        
+        selectProductPanel p1=new selectProductPanel(productListSystem);
+        this.add(p1,BorderLayout.CENTER);
+        
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton c = new JButton("ADD TO SHOPPING CART");
+        p3.add(c);
+        this.add(p3,BorderLayout.SOUTH);
+        
+        
+        
+        
         
      
         

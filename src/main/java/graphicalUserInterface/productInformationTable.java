@@ -6,6 +6,7 @@ package graphicalUserInterface;
 
 import com.mycompany.shopping.Product;
 import java.util.List;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,11 +17,13 @@ import javax.swing.table.DefaultTableModel;
 public class productInformationTable {
 
     JTable table;
+    showDetailsPanel s;
 
     public productInformationTable(List<Product> productListSystem) {
 
         // Define column names
         String[] columnNames = {" Product ID", "NAME", "Category", "Price", "Info"};
+        
 
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -29,19 +32,48 @@ public class productInformationTable {
                 return false;
             }
         };
+        
+        
         // Populate the model with data from the ArrayList
         for (Product product : productListSystem) {
             Object[] rowData = {product.getProductId(), product.getProductName(), product.getProductType(), product.getMarketPrice(), product.getProductInfo()};
             model.addRow(rowData);
         }
+        
+        
 
         // Create JTable with the model
         table = new JTable(model);
 
-        // Set custom row height (adjust this value as needed)
-        table.setRowHeight(40);
+        // Set custom row height 
+        table.setRowHeight(30);
+        
+         s= new showDetailsPanel();
+         // Add a mouse listener to the table to capture clicks on rows
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int selectedRow = table.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    // Get the selected product from the data model
+                    Product selectedProduct = productListSystem.get(selectedRow);
+
+                    // Pass the selected product to the ShowProductDetailsPanel
+                   s.setInfo(selectedProduct);
+                }
+            }
+        });
 
     }
+    
+    public JPanel getPanel(){
+        return s;
+    }
+    
+    
+    
+    
 
     public void updateTable(List<Product> filteredProducts) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
