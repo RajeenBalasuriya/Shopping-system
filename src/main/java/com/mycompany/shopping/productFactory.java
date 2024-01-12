@@ -61,6 +61,8 @@ public class productFactory {
        System.out.println("please enter the buying price");
        buyingPrice=scanner.nextDouble();
        
+       scanner.nextLine();
+       
        //below code sinppet will determine type of the product creating
        if(productType==1){
            String brand;

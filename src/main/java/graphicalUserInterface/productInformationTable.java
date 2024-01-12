@@ -5,6 +5,8 @@
 package graphicalUserInterface;
 
 import com.mycompany.shopping.Product;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -44,10 +46,18 @@ public class productInformationTable {
 
         // Create JTable with the model
         table = new JTable(model);
+        
+         // Set preferred size of the table
+        table.setPreferredSize(new Dimension(1000, 300));
+        
+       // Set custom font for column headings 
+        Font headerFont = new Font("SansSerif", Font.BOLD, 14); 
+        table.getTableHeader().setFont(headerFont);
 
         // Set custom row height 
         table.setRowHeight(30);
         
+
          s= new showDetailsPanel();
          // Add a mouse listener to the table to capture clicks on rows
         table.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -60,6 +70,7 @@ public class productInformationTable {
                     Product selectedProduct = productListSystem.get(selectedRow);
 
                     // Pass the selected product to the ShowProductDetailsPanel
+                    
                    s.setInfo(selectedProduct);
                 }
             }

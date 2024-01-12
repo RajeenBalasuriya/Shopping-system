@@ -86,7 +86,12 @@ public abstract class Product implements Serializable {
     
     public abstract String getProductType();
     
-    public abstract String getProductInfo();
+    
+    
+    public abstract String additionalInfo1();//to get separate additional 1 info of each child class
+    public abstract String additionalInfo2();//to get separate additional 2 info of each child class
+    public abstract String getProductInfo();//will return string of both additionalInfo1 and additionalInfo2
+    
     
 
     
