@@ -12,10 +12,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import com.mycompany.shopping.ShoppingCart;
 
 public class HomeFrame extends JFrame {
 
-    public HomeFrame(List<Product> productListSystem,User user) {
+    public HomeFrame(List<Product> productListSystem,User user,ShoppingCart userCart) {
         SwingUtilities.invokeLater(() -> {
             // Set the layout manager for the frame
             this.setLayout(new BorderLayout());
@@ -43,7 +44,7 @@ public class HomeFrame extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Create and show the ShoppingCartGui when the button is clicked
-                    ShoppingCartGuiFrame shoppingCartFrame = new ShoppingCartGuiFrame(user);
+                    ShoppingCartGuiFrame shoppingCartFrame = new ShoppingCartGuiFrame(user,userCart);
                     
          
                     
@@ -51,13 +52,10 @@ public class HomeFrame extends JFrame {
             });
 
 
-            SelectProductPanel p1 = new SelectProductPanel(productListSystem);
+            SelectProductPanel p1 = new SelectProductPanel(productListSystem,userCart);
             this.add(p1, BorderLayout.CENTER);
 
-            JPanel p3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            JButton addCartButton = new JButton("ADD TO SHOPPING CART");
-            p3.add(addCartButton);
-            this.add(p3, BorderLayout.SOUTH);
+      
             
             
             

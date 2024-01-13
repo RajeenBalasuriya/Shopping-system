@@ -3,13 +3,17 @@
 package graphicalUserInterface;
 
 import com.mycompany.shopping.Product;
+import com.mycompany.shopping.ShoppingCart;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
 
 /**
  * Represents a panel for displaying product details.
@@ -32,7 +36,7 @@ public class ShowDetailsPanel extends JPanel {
     private final JLabel additionalInfo2;
     private final JLabel infoAdditional1;
     private final JLabel infoAdditional2;
-    
+    private final JButton addCartButton; 
 
     /**
      * Creates a new instance of ShowDetailsPanel.
@@ -69,6 +73,8 @@ public class ShowDetailsPanel extends JPanel {
          infoAdditional1=new JLabel();//will dynamically set value depending on product type
          infoAdditional2=new JLabel();//will dynamically set value depending on product type
          infoItemsAvailable = new JLabel();
+         
+         
         
 
 
@@ -102,6 +108,12 @@ public class ShowDetailsPanel extends JPanel {
         
         panelInfo.add(panelInfoComponents);
         this.add(panelInfo,BorderLayout.CENTER);
+        
+         JPanel p3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+         addCartButton = new JButton("ADD TO SHOPPING CART");
+         p3.add(addCartButton);
+         
+         this.add(p3,BorderLayout.SOUTH);
     }
     
     /**
@@ -109,7 +121,7 @@ public class ShowDetailsPanel extends JPanel {
      * 
      * @param product The Product object containing information to be displayed.
      */
-    public void setInfo(Product product){
+    public void setInfo(Product product,ShoppingCart userCart){
         // Update the label in SOUTH with the new product information
         infoID.setText(product.getProductId());
         infoType.setText(product.getProductType());
@@ -130,9 +142,23 @@ public class ShowDetailsPanel extends JPanel {
         }
         infoItemsAvailable.setText(String.valueOf(product.getNoOfAvailableItems()));
         
+        addCartButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            userCart.addProduct(product);//adding product to the cart
+            product.incrementCartCount();//increment cartCount by1 after adding to cart
+            
+            
+        }
+    });
+        
+        
         
         // Repaint the panel to reflect the changes
         this.revalidate();
         this.repaint();
     }
 }
+
+

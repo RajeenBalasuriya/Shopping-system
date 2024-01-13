@@ -30,6 +30,9 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     //list to store user objects
     private final List<User> userObjects = new ArrayList<>();
+    
+    //shopping cart object
+    ShoppingCart userCart= ShoppingCart.getInstance();
 
     // Private constructor to avoid instanziation of object outside the class
     private WestminsterShoppingManager() {
@@ -82,7 +85,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     saveProducts();
                     break;
                 case 5:
-                    manageUser(scanner);//will handle the gui inside the method
+                    manageUser(scanner,userCart);//will handle the gui inside the method
 
                     break;
                 case 6:
@@ -227,7 +230,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     }
 
-    public void manageUser(Scanner scanner) {
+    public void manageUser(Scanner scanner,ShoppingCart userCart) {
 
         boolean optionValidate;
 
@@ -247,18 +250,20 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     String password = scanner.next();
                     scanner.nextLine();
 
-                    int userListPointer = 0;//track the current object to check existing profiles
+                   
                     // Check whether the given user object is available by using a for-each loop
                     for (User user : userObjects) {
 
                         if (user.getPassword().equals(password) && user.getUserName().equals(userName)) {
-                            HomeFrame homeFrame = new HomeFrame(this.getProductList(),user);
+                            userCart = ShoppingCart.getInstance();
+                            HomeFrame homeFrame = new HomeFrame(this.getProductList(),user,userCart);
+                            
                             optionValidate = false;
                         }
-                        userListPointer++;
+                        
                     }
-                    //display message no such account after traveling through userObject list
-                    if (userListPointer == userObjects.size()) {
+                    //display message no such account by tracking using optionValidate
+                    if (optionValidate==true) {
                         System.out.println("NO SUCH ACCOUNT!");
                     }
 
