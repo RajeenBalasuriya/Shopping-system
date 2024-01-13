@@ -6,53 +6,60 @@ package com.mycompany.shopping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author rajeen
  */
 public class ShoppingCart {
-    
-    private static ShoppingCart instance;
-    private List<Product> productList;
-    
-    //initialize of private constructor to avoid instantiation outside the class
-    
-    private ShoppingCart(){
-        this.productList=new ArrayList<>();
+     private static ShoppingCart instance;
+    private Map<String, Product> productMap;
+
+    // Private constructor to avoid instantiation outside the class
+    private ShoppingCart() {
+        this.productMap = new HashMap<>();
     }
-    
-    //enable global level access to the instance
-    public static synchronized ShoppingCart getInstance(){
-        if(instance==null){
-            instance=new ShoppingCart();//instantiate shoppingcart object if and only if there is no any other instances
+
+    // Enable global level access to the instance
+    public static synchronized ShoppingCart getInstance() {
+        if (instance == null) {
+            instance = new ShoppingCart(); // Instantiate ShoppingCart object if and only if there is no other instance
         }
         return instance;
     }
     
-    
-    //following methods are for the purpose of editing cart
-    
+    // Methods for editing the cart
+
     public void addProduct(Product product) {
-        productList.add(product);
+        productMap.put(product.getProductId(), product);
     }
 
-    public void removeProduct(Product product) {
-        productList.remove(product);
+    public void removeProduct(String productId) {
+        productMap.remove(productId);
     }
-    
 
     public double calculateTotalCost() {
         double totalCost = 0.0;
-        for (Product product : productList) {
+        for (Product product : productMap.values()) {
             totalCost += product.getMarketPrice();
         }
         return totalCost;
     }
 
-    public List<Product> getProductList() {
-        return productList;
+    public Map<String, Product> getProductMap() {
+        return productMap;
     }
+
+    // You can add more methods as needed
+
+
+
+    public static void setInstance(ShoppingCart newInstance) {
+        instance = newInstance;
+    }
+
 
     
 }

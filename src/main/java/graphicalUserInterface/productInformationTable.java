@@ -5,6 +5,7 @@
 package graphicalUserInterface;
 
 import com.mycompany.shopping.Product;
+import com.mycompany.shopping.ShoppingCart;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
@@ -20,8 +21,9 @@ public class ProductInformationTable {
 
     JTable table;
     ShowDetailsPanel s;
+    Product selectedProduct;
 
-    public ProductInformationTable(List<Product> productListSystem) {
+    public ProductInformationTable(List<Product> productListSystem,ShoppingCart userCart) {
 
         // Define column names
         String[] columnNames = {" Product ID", "NAME", "Category", "Price", "Info"};
@@ -65,18 +67,20 @@ public class ProductInformationTable {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int selectedRow = table.getSelectedRow();
 
-                if (selectedRow != -1) {
+               
                     // Get the selected product from the data model
-                    Product selectedProduct = productListSystem.get(selectedRow);
+                    selectedProduct = productListSystem.get(selectedRow);
 
                     // Pass the selected product to the ShowProductDetailsPanel
-                    
-                   s.setInfo(selectedProduct);
-                }
+                   
+                   s.setInfo(selectedProduct,userCart);
+                
             }
         });
 
     }
+    
+
     
     public JPanel getPanel(){
         return s;

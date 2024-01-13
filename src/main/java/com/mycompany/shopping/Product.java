@@ -19,6 +19,7 @@ public abstract class Product implements Serializable {
     private int noOfAvailableItems;
     private double marketPrice;
     private double buyingPrice;
+    private int cartCount;
     
     
     
@@ -32,6 +33,7 @@ public abstract class Product implements Serializable {
         this.marketPrice=marketPrice;
         this.buyingPrice=buyingPrice;
         this.productId=productId;
+        this.cartCount=0;
         
     }
     
@@ -85,6 +87,15 @@ public abstract class Product implements Serializable {
     
     
     public abstract String getProductType();
+
+    public int getCartCount() {
+        return cartCount;
+    }
+
+    public void incrementCartCount() {
+        this.cartCount++;
+        
+    }
     
     
     

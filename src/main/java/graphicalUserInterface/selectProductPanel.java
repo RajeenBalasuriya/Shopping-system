@@ -1,6 +1,7 @@
 package graphicalUserInterface;
 
 import com.mycompany.shopping.Product;
+import com.mycompany.shopping.ShoppingCart;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ public class SelectProductPanel extends JPanel {
     private final List<Product> productListSystem;
     private final ProductInformationTable tableInfo;
 
-    public SelectProductPanel(List<Product> productListSystem) {
+    public SelectProductPanel(List<Product> productListSystem,ShoppingCart userCart) {
         
         this.productListSystem = productListSystem;
         Collections.sort(productListSystem, Comparator.comparing(Product::getProductName));//sorting the list before adding to the table
@@ -35,7 +36,7 @@ public class SelectProductPanel extends JPanel {
         this.add(p2, BorderLayout.NORTH);
         
         // Creating the information table object
-        tableInfo = new ProductInformationTable(productListSystem);
+        tableInfo = new ProductInformationTable(productListSystem,userCart);
         JScrollPane jScrollPane = new JScrollPane(tableInfo.table);
         jScrollPane.setPreferredSize(new Dimension(500, 300));
 
