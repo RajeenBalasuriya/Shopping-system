@@ -121,7 +121,7 @@ public class ShowDetailsPanel extends JPanel {
      * 
      * @param product The Product object containing information to be displayed.
      */
-    public void setInfo(Product product,ShoppingCart userCart){
+    public void setInfo(Product product){
         // Update the label in SOUTH with the new product information
         infoID.setText(product.getProductId());
         infoType.setText(product.getProductType());
@@ -142,22 +142,37 @@ public class ShowDetailsPanel extends JPanel {
         }
         infoItemsAvailable.setText(String.valueOf(product.getNoOfAvailableItems()));
         
-        addCartButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            
-            userCart.addProduct(product);//adding product to the cart
-            product.incrementCartCount();//increment cartCount by1 after adding to cart
-            
-            
-        }
-    });
-        
         
         
         // Repaint the panel to reflect the changes
         this.revalidate();
         this.repaint();
+    }
+    
+    public void addToCart(ShoppingCart userCart,Product product){
+        
+        
+        addCartButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            int noOfAvailableItems=product.getNoOfAvailableItems();
+            
+            if(noOfAvailableItems==0){
+                System.out.println(product.getProductName()+":"+product.getNoOfAvailableItems());
+            }
+            else{
+                
+                 userCart.addProduct(product);//adding product to the cart
+                 product.incrementCartCount();//increment cartCount by1 after adding to cart
+                 product.setNoOfAvailableItems(product.getNoOfAvailableItems()-1);
+                 infoItemsAvailable.setText(String.valueOf(product.getNoOfAvailableItems()));
+                 
+            }
+            
+            
+        }
+    });
     }
 }
 
