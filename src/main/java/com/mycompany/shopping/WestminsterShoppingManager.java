@@ -1,40 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.mycompany.shopping;
 
-/**
- *
- * @author rajeen
- */
-import graphicalUserInterface.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import graphicalUserInterface.HomeFrame;
+
+import java.io.*;
+import java.util.*;
 
 public class WestminsterShoppingManager implements ShoppingManager {
 
     private static WestminsterShoppingManager instance;
-    //product list in the system  
+    //product list in the system
     private final List<Product> productListSystem;
 
     //list to store user objects
     private final List<User> userObjects = new ArrayList<>();
-    
+
     //shopping cart object
     ShoppingCart userCart= ShoppingCart.getInstance();
 
-    // Private constructor to avoid instanziation of object outside the class
+    // Private constructor to avoid instantiation of object outside the class
     private WestminsterShoppingManager() {
         this.productListSystem = new ArrayList<>();
     }
@@ -155,11 +139,10 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 if (productListSystem.remove(product)) {
 
                     System.out.println("Product removed successfully");
-                    break;
                 } else {
                     System.out.println("Product removed failed");
-                    break;
                 }
+                break;
             }
         }
     }
@@ -168,7 +151,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
     public void printProducts() {
 
         // Sorting based on the productId attribute using a custom comparator
-        Collections.sort(productListSystem, Comparator.comparing(Product::getProductId));
+        productListSystem.sort(Comparator.comparing(Product::getProductId));
 
         // Printing the sorted list
         for (Product product : productListSystem) {
@@ -188,7 +171,6 @@ public class WestminsterShoppingManager implements ShoppingManager {
             // write object to file
             for (Product product : productListSystem) {
                 oos.writeObject(product);
-
             }
 
             System.out.println("Saved");
@@ -250,20 +232,20 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     String password = scanner.next();
                     scanner.nextLine();
 
-                   
+
                     // Check whether the given user object is available by using a for-each loop
                     for (User user : userObjects) {
 
                         if (user.getPassword().equals(password) && user.getUserName().equals(userName)) {
                             userCart = ShoppingCart.getInstance();
                             HomeFrame homeFrame = new HomeFrame(this.getProductList(),user,userCart);
-                            
+
                             optionValidate = false;
                         }
-                        
+
                     }
                     //display message no such account by tracking using optionValidate
-                    if (optionValidate==true) {
+                    if (optionValidate) {
                         System.out.println("NO SUCH ACCOUNT!");
                     }
 
@@ -280,7 +262,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                         String password = scanner.next();
                         scanner.nextLine();
 
-                        //check wether the details are correct to make the profile
+                        //check whether the details are correct to make the profile
                         if (Validator.isValidPassword(password)) {
                             User user = new User(userName, password);//creation of the user object
                             userObjects.add(user);// add created user to the list
@@ -356,5 +338,4 @@ public class WestminsterShoppingManager implements ShoppingManager {
     public List<Product> getProductList() {
         return productListSystem;
     }
-
 }
