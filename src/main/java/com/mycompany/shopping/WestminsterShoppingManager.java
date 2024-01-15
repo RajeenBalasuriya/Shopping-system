@@ -2,6 +2,7 @@
 package com.mycompany.shopping;
 
 import graphicalUserInterface.HomeFrame;
+import graphicalUserInterface.ShoppingCartGui;
 
 import java.io.*;
 import java.util.*;
@@ -238,7 +239,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
                         if (user.getPassword().equals(password) && user.getUserName().equals(userName)) {
                             userCart = ShoppingCart.getInstance();
-                            HomeFrame homeFrame = new HomeFrame(this.getProductList(),user,userCart);
+                            ;
+                            HomeFrame homeFrame = new HomeFrame(this.getProductList(),userCart,user);
 
                             optionValidate = false;
                         }
