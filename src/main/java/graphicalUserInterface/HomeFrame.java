@@ -3,12 +3,12 @@ package graphicalUserInterface;
 import com.mycompany.shopping.Product;
 import com.mycompany.shopping.ShoppingCart;
 import com.mycompany.shopping.User;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -17,16 +17,13 @@ import java.util.stream.Collectors;
 public class HomeFrame extends JFrame {
 
     private JTable table;
-    private Product selectedProduct; //track the selected product of the user
+    private Product selectedProduct;
     private final List<Product> productListSystem;
 
-    private List<Product> filteredProducts ;
-
-    private boolean isFilterd=false;
-
+    private List<Product> filteredProducts;
+    private boolean isFiltered = false;
 
     JLabel productID = new JLabel();
-
     JLabel productName = new JLabel();
     JLabel itemsAvailable = new JLabel();
     JLabel productType = new JLabel();
@@ -39,191 +36,181 @@ public class HomeFrame extends JFrame {
     JLabel infoAdditional1 = new JLabel();
     JLabel infoAdditional2 = new JLabel();
 
-
-
-    // constructor for the HomeFrame
-    public HomeFrame(List<Product> productListSystem, User user, ShoppingCart userCart) {
-
-
+    public HomeFrame(List<Product> productListSystem,ShoppingCart userCart,User user) {
         this.productListSystem = productListSystem;
 
-        // components of home frame
         JButton shoppingCartButton = new JButton("Shopping Cart");
         JButton addToCartButton = new JButton("Add TO Cart");
 
-        // set attributes of home frame
-
-        this.setSize(1000, 650);// set the frame size
-        this.setLocationRelativeTo(null);// Center the frame on the screen
-
-        /* HomeFrame Layout setting */
-
-        // setting layout manager of home frame
+        this.setSize(1000, 650);
+        this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
 
-        // creating a top panel
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topPanel.add(shoppingCartButton);
-        this.add(topPanel, BorderLayout.NORTH);// adding top panel to NORTH of homeFrame
+        this.add(topPanel, BorderLayout.NORTH);
 
-        // creating of productTablePanel(Center panel of homeFrame)
         JPanel productInformationPanel = new JPanel(new BorderLayout());
 
         JPanel ComboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel SelectCategory = new JLabel("Select Category");
 
-        //selections for the combo box
         String[] menuItems = {"All", "Electronics", "Clothing"};
         JComboBox<String> ComboBox = new JComboBox<>(menuItems);
-        //add combobox to comboPanel
         ComboPanel.add(SelectCategory);
         ComboPanel.add(ComboBox);
-
-        // Add an empty border with some space to move the contents down
         ComboPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
-        // Add combo panel to productInformationPanel
         productInformationPanel.add(ComboPanel, BorderLayout.NORTH);
 
-        // Use the class member table instead of creating a new JTable
         createTable(productListSystem, userCart);
         JScrollPane scrollPane = new JScrollPane(table);
-
-        // Set the preferred size for the scroll pane
         scrollPane.setPreferredSize(new Dimension(800, 300));
 
-        // creating table panel and adding empty border with space on both sides
         JPanel tablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20)); // Adjust the values as needed
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         tablePanel.add(scrollPane);
 
-        //creating a detailPanel to show details
-        JPanel detailPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        //creating a panel with two colums add  inside of detail panel which is placed left
-        JPanel infoDetailPanel = new JPanel(new GridLayout(6,2));
+        JPanel detailPanel = new JPanel(new BorderLayout());
+        JPanel detailPanelTop= new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel productInfoTag = new JLabel("Product Information");
+        productInfoTag.setFont(new Font("SansSerif", Font.BOLD, 16)); // Set font to bold
+        productInfoTag.setVisible(false);// hidden untill customer selects a product
+        detailPanelTop.add(productInfoTag);
+        detailPanel.add(detailPanelTop,BorderLayout.NORTH);
 
-        //add infoDetailPanel to the detailPanel
-        detailPanel.add(infoDetailPanel);
+        JPanel detailPanelBottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel infoDetailPanel = new JPanel(new GridLayout(6, 2));
+        detailPanelBottom.add(infoDetailPanel);
+        detailPanel.add(detailPanelBottom,BorderLayout.SOUTH);
 
 
         productInformationPanel.add(tablePanel, BorderLayout.CENTER);
-        productInformationPanel.add(detailPanel,BorderLayout.SOUTH);
-
-
-
-        /*
-        Section below is for showing selected product details which is also in productInformation panel
-
-         */
+        productInformationPanel.add(detailPanel, BorderLayout.SOUTH);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.add(addToCartButton);
         this.add(productInformationPanel, BorderLayout.CENTER);
-        this.add(bottomPanel,BorderLayout.SOUTH);
+        this.add(bottomPanel, BorderLayout.SOUTH);
 
-        //setting the events listeners for components in the home frame
 
-        // Add a mouse listener to the table to capture clicks on rows
+        // starting from here there will be action listeners fot buttons in home frame
+
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 int selectedRow = table.getSelectedRow();
-
-
-                // Get the selected product from the data model
-                if(isFilterd){
+                if (isFiltered) {
                     selectedProduct = filteredProducts.get(selectedRow);
-                    setDetails(infoDetailPanel,selectedProduct);
+                    setDetails(infoDetailPanel, selectedProduct);
                     System.out.println("Selected Type: " + selectedProduct.getProductId());
-
-                }else{
+                } else {
                     selectedProduct = productListSystem.get(selectedRow);
-                    setDetails(infoDetailPanel,selectedProduct);
+                    setDetails(infoDetailPanel, selectedProduct);
                     System.out.println("Selected Type: " + selectedProduct.getProductId());
                 }
-
-
-
-
+                productInfoTag.setVisible(true);// make visible after customer selects a product
             }
         });
 
-        // Add an ActionListener to the combo box
         ComboBox.addActionListener(e -> {
-            // Filter products based on the selected type
             String selectedType = (String) ComboBox.getSelectedItem();
             filterProducts(selectedType);
             updateTable(filteredProducts);
+        });
 
+        addToCartButton.addActionListener(e -> {
+            if (selectedProduct != null && selectedProduct.getNoOfAvailableItems()>0 ) {
+                //what will happen in the gui after the click
+                userCart.addProduct(selectedProduct);
+                JOptionPane.showMessageDialog(this, "Product added to cart!");
+                selectedProduct.setNoOfAvailableItems(selectedProduct.getNoOfAvailableItems() - 1);
+                setDetails(infoDetailPanel, selectedProduct);
+                table.repaint();
+                //adding the selected item to the cart
+                selectedProduct.incrementCartCount();//cartCount is the number of time particular product added to the cart
+                userCart.addProduct(selectedProduct);
 
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a product before adding to cart.");
+            }
+        });
+
+        shoppingCartButton.addActionListener(e -> {
+
+           ShoppingCartGui cartFrame = new ShoppingCartGui(userCart,selectedProduct);
         });
 
         this.setVisible(true);
+
+
     }
 
     public void createTable(List<Product> productListSystem, ShoppingCart userCart) {
-
-        // Define column names
         String[] columnNames = {" Product ID", "NAME", "Category", "Price", "Info"};
 
-        // initialize model for the table
+        DefaultTableModel model = getDefaultTableModel(productListSystem, columnNames);
+
+        table = new JTable(model);
+
+        // Set custom renderer for each column
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(new CustomRowRenderer());
+        }
+
+        Font headerFont = new Font("SansSerif", Font.BOLD, 14);
+        table.getTableHeader().setFont(headerFont);
+
+        table.setRowHeight(30);
+    }
+
+    @NotNull
+    private static DefaultTableModel getDefaultTableModel(List<Product> productListSystem, String[] columnNames) {
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Make all cells uneditable
                 return false;
             }
         };
+        // Set custom renderer for each column to center the text
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-        // Populate the model with data from the ArrayList
+
         for (Product product : productListSystem) {
             Object[] rowData = {product.getProductId(), product.getProductName(), product.getProductType(), product.getMarketPrice(), product.getProductInfo()};
             model.addRow(rowData);
         }
-
-        // Create JTable with the model
-        table = new JTable(model);
-
-        // Set custom font for column headings
-        Font headerFont = new Font("SansSerif", Font.BOLD, 14);
-        table.getTableHeader().setFont(headerFont);
-
-        // Set custom row height
-        table.setRowHeight(30);
+        return model;
     }
 
-    //method to update table when select a product category from combo box
     private void updateTable(List<Product> filteredProducts) {
-
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
 
-        // Populate the model with data from the filtered products
         for (Product product : filteredProducts) {
             Object[] rowData = {product.getProductId(), product.getProductName(), product.getProductType(), product.getMarketPrice(), product.getProductInfo()};
             model.addRow(rowData);
         }
+
+        // Force a repaint
+        table.repaint();
     }
 
-    //method to  filter products when category is selected from combo box
     private void filterProducts(String selectedType) {
         if ("All".equals(selectedType)) {
-            isFilterd=false;
-            this.filteredProducts=productListSystem;
-
+            isFiltered = false;
+            this.filteredProducts = productListSystem;
         } else {
-            isFilterd=true;
-            filteredProducts=(productListSystem.stream()
+            isFiltered = true;
+            filteredProducts = productListSystem.stream()
                     .filter(product -> selectedType.equals(product.getProductType()))
-                    .collect(Collectors.toList()));
-
+                    .collect(Collectors.toList());
         }
     }
 
-    //method to show info in detail panel
     private void setDetails(JPanel infoDetailPanel, Product selectedProduct) {
-
-        // Clear existing labels from infoDetailPanel
         infoDetailPanel.removeAll();
+
 
         productID.setText("Product Id:");
         infoDetailPanel.add(productID);
@@ -250,7 +237,7 @@ public class HomeFrame extends JFrame {
             infoDetailPanel.add(additionalInfo2);
             infoAdditional2.setText(selectedProduct.additionalInfo2());
             infoDetailPanel.add(infoAdditional2);
-        } else if(selectedProduct.getProductType().equals("Electronics")) {
+        } else if (selectedProduct.getProductType().equals("Electronics")) {
             additionalInfo1.setText("Brand");
             infoDetailPanel.add(additionalInfo1);
             infoAdditional1.setText(selectedProduct.additionalInfo1());
@@ -267,9 +254,26 @@ public class HomeFrame extends JFrame {
         infoItemsAvailable.setText(String.valueOf(selectedProduct.getNoOfAvailableItems()));
         infoDetailPanel.add(infoItemsAvailable);
 
-        // Force UI update
         infoDetailPanel.revalidate();
         infoDetailPanel.repaint();
     }
 
+    private class CustomRowRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            int noOfAvailableItems;
+            if (isFiltered) {
+                noOfAvailableItems = filteredProducts.get(row).getNoOfAvailableItems();
+            } else {
+                noOfAvailableItems = productListSystem.get(row).getNoOfAvailableItems();
+            }
+
+            Color rowColor = (noOfAvailableItems < 4) ? Color.RED : table.getBackground();
+            component.setBackground(rowColor);
+
+            return component;
+        }
+    }
 }

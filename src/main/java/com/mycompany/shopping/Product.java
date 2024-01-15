@@ -33,7 +33,7 @@ public abstract class Product implements Serializable {
         this.marketPrice=marketPrice;
         this.buyingPrice=buyingPrice;
         this.productId=productId;
-        this.cartCount=0;
+        this.cartCount=1;
         
     }
     
