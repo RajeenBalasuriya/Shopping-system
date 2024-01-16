@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.mycompany.shopping;
 
 import java.io.Serializable;
@@ -11,7 +8,7 @@ import java.io.Serializable;
  * @author rajeen
  */
 public class User implements Serializable {
-    private final boolean isFirstPurchase;//used to track the first purchase
+    private int noOfPurchases;//used to track the first purchase
     private String userName;
     private String password;
 
@@ -20,7 +17,7 @@ public class User implements Serializable {
     public User(String userName,String password){
         this.userName=userName;
         this.password=password;
-        this.isFirstPurchase=true;
+        this.noOfPurchases =0;
        
         
     }
@@ -43,6 +40,13 @@ public class User implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public int getNoOfPurchases(){
+        return noOfPurchases;
+    }
+    public void setNoOfPurchases(int noOfPurchases){
+        this.noOfPurchases = noOfPurchases;
     }
 
 

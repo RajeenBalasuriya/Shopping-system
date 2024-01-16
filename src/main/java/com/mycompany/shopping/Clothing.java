@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.mycompany.shopping;
 
 /**
@@ -46,7 +43,7 @@ public class Clothing extends Product {
     
      @Override
     public String getProductInfo(){
-        return (Integer.toString(this.size)+" "+this.colour);
+        return (this.size +" "+this.colour);
     }
     
     //overing the toString method

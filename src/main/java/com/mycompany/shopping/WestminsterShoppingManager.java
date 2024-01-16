@@ -68,6 +68,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     break;
                 case 4:
                     saveProducts();
+                    saveUsers();
                     break;
                 case 5:
                     manageUser(scanner,userCart);//will handle the gui inside the method
@@ -289,7 +290,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     }
 
-    public void saveUsers() {
+    public  void saveUsers() {
         try {
             File file = new File("userObject.ser");
 

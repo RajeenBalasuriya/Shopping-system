@@ -18,6 +18,8 @@ public class HomeFrame extends JFrame {
 
     private JTable table;
     private Product selectedProduct;
+    private ShoppingCartGui cartFrame;
+    private boolean isCartFormed = false;
     private final List<Product> productListSystem;
 
     private List<Product> filteredProducts;
@@ -36,7 +38,7 @@ public class HomeFrame extends JFrame {
     JLabel infoAdditional1 = new JLabel();
     JLabel infoAdditional2 = new JLabel();
 
-    public HomeFrame(List<Product> productListSystem,ShoppingCart userCart,User user) {
+    public HomeFrame(List<Product> productListSystem, ShoppingCart userCart, User user) {
         this.productListSystem = productListSystem;
 
         JButton shoppingCartButton = new JButton("Shopping Cart");
@@ -71,17 +73,17 @@ public class HomeFrame extends JFrame {
         tablePanel.add(scrollPane);
 
         JPanel detailPanel = new JPanel(new BorderLayout());
-        JPanel detailPanelTop= new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel detailPanelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel productInfoTag = new JLabel("Product Information");
         productInfoTag.setFont(new Font("SansSerif", Font.BOLD, 16)); // Set font to bold
         productInfoTag.setVisible(false);// hidden untill customer selects a product
         detailPanelTop.add(productInfoTag);
-        detailPanel.add(detailPanelTop,BorderLayout.NORTH);
+        detailPanel.add(detailPanelTop, BorderLayout.NORTH);
 
         JPanel detailPanelBottom = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel infoDetailPanel = new JPanel(new GridLayout(6, 2));
         detailPanelBottom.add(infoDetailPanel);
-        detailPanel.add(detailPanelBottom,BorderLayout.SOUTH);
+        detailPanel.add(detailPanelBottom, BorderLayout.SOUTH);
 
 
         productInformationPanel.add(tablePanel, BorderLayout.CENTER);
@@ -119,7 +121,7 @@ public class HomeFrame extends JFrame {
         });
 
         addToCartButton.addActionListener(e -> {
-            if (selectedProduct != null && selectedProduct.getNoOfAvailableItems()>0 ) {
+            if (selectedProduct != null && selectedProduct.getNoOfAvailableItems() > 0) {
                 //what will happen in the gui after the click
                 userCart.addProduct(selectedProduct);
                 JOptionPane.showMessageDialog(this, "Product added to cart!");
@@ -130,14 +132,32 @@ public class HomeFrame extends JFrame {
                 selectedProduct.incrementCartCount();//cartCount is the number of time particular product added to the cart
                 userCart.addProduct(selectedProduct);
 
+                //updating the cart when clicking the add to cart button
+                if (isCartFormed) {
+                    cartFrame.updateInfo(cartFrame.getTableModel(), user);
+
+
+
+                }
+
+
             } else {
                 JOptionPane.showMessageDialog(this, "Please select a product before adding to cart.");
             }
         });
 
         shoppingCartButton.addActionListener(e -> {
+            if (!isCartFormed) {
+                user.setNoOfPurchases(user.getNoOfPurchases()+1);
+                cartFrame = new ShoppingCartGui(userCart,user);
 
-           ShoppingCartGui cartFrame = new ShoppingCartGui(userCart,selectedProduct);
+                isCartFormed = true;
+            } else {
+                user.setNoOfPurchases(user.getNoOfPurchases()+1);
+                cartFrame.setVisible(true);
+            }
+
+
         });
 
         this.setVisible(true);

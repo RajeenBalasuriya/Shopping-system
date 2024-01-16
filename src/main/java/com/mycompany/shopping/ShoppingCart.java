@@ -4,8 +4,6 @@
  */
 package com.mycompany.shopping;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,11 +13,13 @@ import java.util.Map;
  */
 public class ShoppingCart {
      private static ShoppingCart instance;
-    private Map<String, Product> productMap;
+    private final Map<String, Product> productMap;
+    private  double totalDiscount;
 
     // Private constructor to avoid instantiation outside the class
     private ShoppingCart() {
         this.productMap = new HashMap<>();
+        this.totalDiscount=0;
     }
 
     // Enable global level access to the instance
@@ -29,7 +29,7 @@ public class ShoppingCart {
         }
         return instance;
     }
-    
+
     // Methods for editing the cart
 
     public void addProduct(Product product) {
@@ -43,23 +43,34 @@ public class ShoppingCart {
     public double calculateTotalCost() {
         double totalCost = 0.0;
         for (Product product : productMap.values()) {
-            totalCost += product.getMarketPrice();
+            totalCost += product.getMarketPrice()*product.getCartCount();
         }
         return totalCost;
+
+    }
+
+    public double calculateFirstPurchaseDiscount(double totalCost){
+        totalDiscount=totalDiscount+totalCost*0.1;
+        return (totalCost*10)/100;
+
+    }
+
+    public double calculateCategoryDiscount(double totalCost){
+        totalDiscount=totalDiscount+totalCost*0.2;
+        return totalCost*0.2;
     }
 
     public Map<String, Product> getProductMap() {
         return productMap;
     }
 
-    // You can add more methods as needed
+public double getTotalDiscount(){
+        return totalDiscount;
+}
+public void setTotalDiscount(double totalDiscount){
+        totalDiscount=this.totalDiscount;
+
+}
 
 
-
-    public static void setInstance(ShoppingCart newInstance) {
-        instance = newInstance;
-    }
-
-
-    
 }
