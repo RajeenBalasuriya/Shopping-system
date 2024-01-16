@@ -123,7 +123,7 @@ public class ShoppingCartGui extends JFrame {
 
     }
 
-    public void setInfoDisocunt(User user, ShoppingCart userCart) {
+    public void setInfoDiscount(User user, ShoppingCart userCart) {
         infoTotal.setText(userCart.calculateTotalCost() + "£");
 
         // setting the first purchase discount
@@ -154,7 +154,7 @@ public class ShoppingCartGui extends JFrame {
             tableModel.addRow(new Object[]{product.getProductId() + "," + product.getProductName() + "," + product.additionalInfo1() + "," + product.additionalInfo2(), product.getCartCount(), product.getMarketPrice()});
         }
 
-        setInfoDisocunt(user, userCart);
+        setInfoDiscount(user, userCart);
 
 
     }
