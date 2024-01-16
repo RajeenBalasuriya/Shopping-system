@@ -2,7 +2,6 @@
 package com.mycompany.shopping;
 
 import graphicalUserInterface.HomeFrame;
-import graphicalUserInterface.ShoppingCartGui;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +16,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
     private final List<User> userObjects = new ArrayList<>();
 
     //shopping cart object
-    ShoppingCart userCart= ShoppingCart.getInstance();
+    ShoppingCart userCart = ShoppingCart.getInstance();
 
     // Private constructor to avoid instantiation of object outside the class
     private WestminsterShoppingManager() {
@@ -53,32 +52,20 @@ public class WestminsterShoppingManager implements ShoppingManager {
             System.out.println("6. Exit");
             System.out.println("Enter your choice: ");
 
-            choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            choice =Validator.getValidIntInput(scanner);
+
 
             switch (choice) {
-                case 1:
-                    addProduct(productListSystem);
-                    break;
-                case 2:
-                    removeProduct();
-                    break;
-                case 3:
-                    printProducts();
-                    break;
-                case 4:
+                case 1 -> addProduct(productListSystem);
+                case 2 -> removeProduct();
+                case 3 -> printProducts();
+                case 4 -> {
                     saveProducts();
                     saveUsers();
-                    break;
-                case 5:
-                    manageUser(scanner,userCart);//will handle the gui inside the method
-
-                    break;
-                case 6:
-                    System.out.println("Exiting the console menu.");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                }
+                case 5 -> manageUser(scanner);//will handle the gui inside the method
+                case 6 -> System.out.println("Exiting the console menu.");
+                default -> System.out.println("Invalid choice. Please try again.");
             }
         } while (choice != 6);
 
@@ -91,7 +78,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
         if (productListSystem.size() < 50) {
             boolean add = true;  // Set to true by default
 
-            productFactory produce = new productFactory();
+            ProductFactory produce = new ProductFactory();
             Product productToBeAdded = produce.createProduct();
 
             for (Product product : productListSystem) {
@@ -214,7 +201,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     }
 
-    public void manageUser(Scanner scanner,ShoppingCart userCart) {
+    public void manageUser(Scanner scanner) {
 
         boolean optionValidate;
 
@@ -230,7 +217,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     System.out.println("Please enter the username");
                     String userName = scanner.next();
                     scanner.nextLine();
-                    System.out.println("Please enter the password");
+                    System.out.println("Please enter the password(must contain (lower case letter, upper case letter,special character))");
                     String password = scanner.next();
                     scanner.nextLine();
 
@@ -239,9 +226,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     for (User user : userObjects) {
 
                         if (user.getPassword().equals(password) && user.getUserName().equals(userName)) {
-                            userCart = ShoppingCart.getInstance();
-                            ;
-                            HomeFrame homeFrame = new HomeFrame(this.getProductList(),userCart,user);
+                            ShoppingCart userCart = ShoppingCart.getInstance();
+                            HomeFrame homeFrame = new HomeFrame(this.getProductList(), userCart, user);
 
                             optionValidate = false;
                         }
@@ -269,7 +255,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                         if (Validator.isValidPassword(password)) {
                             User user = new User(userName, password);//creation of the user object
                             userObjects.add(user);// add created user to the list
-                            passwordStatus = false;//set to false to stop the loop as correct password is inputted
+                            passwordStatus = false;//set too false to stop the loop as correct password is inputted
                             saveUsers();
                         } else {
                             System.out.println("Invalid password. Please try again.");
@@ -290,7 +276,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     }
 
-    public  void saveUsers() {
+    public void saveUsers() {
         try {
             File file = new File("userObject.ser");
 

@@ -41,13 +41,17 @@ public class HomeFrame extends JFrame {
     public HomeFrame(List<Product> productListSystem, ShoppingCart userCart, User user) {
         this.productListSystem = productListSystem;
 
+        // Buttons of the home frame
         JButton shoppingCartButton = new JButton("Shopping Cart");
         JButton addToCartButton = new JButton("Add TO Cart");
 
+        //set settings of the home frame
         this.setSize(1000, 650);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        //setting the layout
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topPanel.add(shoppingCartButton);
         this.add(topPanel, BorderLayout.NORTH);
@@ -57,12 +61,14 @@ public class HomeFrame extends JFrame {
         JPanel ComboPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel SelectCategory = new JLabel("Select Category");
 
+        // Adding the combo box with filter categories
         String[] menuItems = {"All", "Electronics", "Clothing"};
         JComboBox<String> ComboBox = new JComboBox<>(menuItems);
         ComboPanel.add(SelectCategory);
         ComboPanel.add(ComboBox);
         ComboPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
         productInformationPanel.add(ComboPanel, BorderLayout.NORTH);
+
 
         createTable(productListSystem, userCart);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -71,6 +77,10 @@ public class HomeFrame extends JFrame {
         JPanel tablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         tablePanel.add(scrollPane);
+
+        /*
+        BELOW SECTION FORMS THE DETAIL SHOWING PANEL
+         */
 
         JPanel detailPanel = new JPanel(new BorderLayout());
         JPanel detailPanelTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -97,6 +107,8 @@ public class HomeFrame extends JFrame {
 
         // starting from here there will be action listeners fot buttons in home frame
 
+
+        //mouse listener for the table rows
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -120,6 +132,8 @@ public class HomeFrame extends JFrame {
             updateTable(filteredProducts);
         });
 
+        //action listener for the add to cart button
+
         addToCartButton.addActionListener(e -> {
             if (selectedProduct != null && selectedProduct.getNoOfAvailableItems() > 0) {
                 //what will happen in the gui after the click
@@ -137,7 +151,6 @@ public class HomeFrame extends JFrame {
                     cartFrame.updateInfo(cartFrame.getTableModel(), user);
 
 
-
                 }
 
 
@@ -146,14 +159,15 @@ public class HomeFrame extends JFrame {
             }
         });
 
+        //action listener for the shopping cart button
         shoppingCartButton.addActionListener(e -> {
             if (!isCartFormed) {
-                user.setNoOfPurchases(user.getNoOfPurchases()+1);
-                cartFrame = new ShoppingCartGui(userCart,user);
+                user.setNoOfPurchases(user.getNoOfPurchases() + 1);
+                cartFrame = new ShoppingCartGui(userCart, user);
 
                 isCartFormed = true;
             } else {
-                user.setNoOfPurchases(user.getNoOfPurchases()+1);
+                user.setNoOfPurchases(user.getNoOfPurchases() + 1);
                 cartFrame.setVisible(true);
             }
 
@@ -164,6 +178,10 @@ public class HomeFrame extends JFrame {
 
 
     }
+
+    /*
+    BELOW SECTION IS FOR THE METHODS OF HOME FRAME TO CALL WHEN TRIGGERED WITH ACTION LISTENERS
+     */
 
     public void createTable(List<Product> productListSystem, ShoppingCart userCart) {
         String[] columnNames = {" Product ID", "NAME", "Category", "Price", "Info"};
@@ -231,6 +249,7 @@ public class HomeFrame extends JFrame {
     private void setDetails(JPanel infoDetailPanel, Product selectedProduct) {
         infoDetailPanel.removeAll();
 
+        //setting values for the labels
 
         productID.setText("Product Id:");
         infoDetailPanel.add(productID);
@@ -278,6 +297,7 @@ public class HomeFrame extends JFrame {
         infoDetailPanel.repaint();
     }
 
+    //method to make table rows red when items are less than 3
     private class CustomRowRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

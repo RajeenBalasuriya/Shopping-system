@@ -4,7 +4,6 @@ package com.mycompany.shopping;
 import java.io.Serializable;
 
 /**
- *
  * @author rajeen
  */
 public class User implements Serializable {
@@ -12,14 +11,13 @@ public class User implements Serializable {
     private String userName;
     private String password;
 
-    
-    
-    public User(String userName,String password){
-        this.userName=userName;
-        this.password=password;
-        this.noOfPurchases =0;
-       
-        
+
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+        this.noOfPurchases = 0;
+
+
     }
 
     public String getPassword() {
@@ -27,9 +25,9 @@ public class User implements Serializable {
     }
 
     public void setPassword(String password) {
-        if(Validator.isValidPassword(password)){
+        if (Validator.isValidPassword(password)) {
             this.password = password;
-        }else{
+        } else {
             throw new IllegalArgumentException("Invalid Password");
         }
     }
@@ -42,19 +40,13 @@ public class User implements Serializable {
         this.userName = userName;
     }
 
-    public int getNoOfPurchases(){
+    public int getNoOfPurchases() {
         return noOfPurchases;
     }
-    public void setNoOfPurchases(int noOfPurchases){
+
+    public void setNoOfPurchases(int noOfPurchases) {
         this.noOfPurchases = noOfPurchases;
     }
 
 
-
-    
-    
-    
-    
-    
-    
 }

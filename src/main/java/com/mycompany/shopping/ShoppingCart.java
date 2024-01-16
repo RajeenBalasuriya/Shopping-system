@@ -1,25 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.mycompany.shopping;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author rajeen
  */
 public class ShoppingCart {
-     private static ShoppingCart instance;
+    private static ShoppingCart instance;
     private final Map<String, Product> productMap;
-    private  double totalDiscount;
+    private double totalDiscount;
 
     // Private constructor to avoid instantiation outside the class
     private ShoppingCart() {
         this.productMap = new HashMap<>();
-        this.totalDiscount=0;
+        this.totalDiscount = 0;
     }
 
     // Enable global level access to the instance
@@ -43,34 +39,35 @@ public class ShoppingCart {
     public double calculateTotalCost() {
         double totalCost = 0.0;
         for (Product product : productMap.values()) {
-            totalCost += product.getMarketPrice()*product.getCartCount();
+            totalCost += product.getMarketPrice() * product.getCartCount();
         }
         return totalCost;
 
     }
 
-    public double calculateFirstPurchaseDiscount(double totalCost){
-        totalDiscount=totalDiscount+totalCost*0.1;
-        return (totalCost*10)/100;
+    public double calculateFirstPurchaseDiscount(double totalCost) {
+        totalDiscount = totalDiscount + totalCost * 0.1;
+        return (totalCost * 10) / 100;
 
     }
 
-    public double calculateCategoryDiscount(double totalCost){
-        totalDiscount=totalDiscount+totalCost*0.2;
-        return totalCost*0.2;
+    public double calculateCategoryDiscount(double totalCost) {
+        totalDiscount = totalDiscount + totalCost * 0.2;
+        return totalCost * 0.2;
     }
 
     public Map<String, Product> getProductMap() {
         return productMap;
     }
 
-public double getTotalDiscount(){
+    public double getTotalDiscount() {
         return totalDiscount;
-}
-public void setTotalDiscount(double totalDiscount){
-        totalDiscount=this.totalDiscount;
+    }
 
-}
+    public void setTotalDiscount(double totalDiscount) {
+        this.totalDiscount = totalDiscount;
+
+    }
 
 
 }
